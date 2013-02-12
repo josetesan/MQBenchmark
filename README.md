@@ -1,4 +1,4 @@
 MQBenchmark
 ===========
 
-Several MQ products bencharm
+Several MQ products benchmarks
