@@ -59,7 +59,6 @@ public class ApolloStompProducer  implements Serializable , JMSProducer {
 		try {
 			
 			Connection connection = connectionPool.borrowObject();
-			connection.start();
 			QueueSession session = (QueueSession)connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
 			outQueue = 	new StompJmsQueue("/queue/","test.queue");
 			MessageProducer producer = session.createProducer(outQueue);
@@ -72,4 +71,9 @@ public class ApolloStompProducer  implements Serializable , JMSProducer {
 		} 
 	}
 
+	
+	@Override
+	public void stop() throws Exception {
+		connectionPool.close();
+	}
 }

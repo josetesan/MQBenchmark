@@ -59,6 +59,11 @@ public class RabbitMQConsumer implements Serializable, JMSConsumer {
 		return delivery;
 	}
 	
+	@Override
+	public void stop() throws Exception {
+		connectionPool.close();
+	}
+	
 	private ConnectionFactory createFactory() {
 		ConnectionFactory factory = new ConnectionFactory();
 		factory.setUsername("guest");

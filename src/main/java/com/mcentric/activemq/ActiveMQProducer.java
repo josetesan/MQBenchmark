@@ -58,7 +58,6 @@ public class ActiveMQProducer  implements Serializable , JMSProducer {
 		try {
 			
 			Connection connection = connectionPool.borrowObject();
-			connection.start();
 			QueueSession session = (QueueSession)connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
 			MessageProducer producer = session.createProducer(outQueue);
 			TextMessage message = session.createTextMessage("Hello World");
@@ -69,4 +68,9 @@ public class ActiveMQProducer  implements Serializable , JMSProducer {
 		} 
 	}
 
+	
+	@Override
+	public void stop() throws Exception {
+		connectionPool.close();
+	}
 }

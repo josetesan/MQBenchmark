@@ -19,6 +19,7 @@ dependencies {
    compile 'commons-pool:commons-pool:1.6'
    testCompile 'junit:junit:4.11'
    testCompile 'org.databene:contiperf:2.2.0'
+   testRuntime 'org.slf4j:slf4j-simple:1.7.2'
    
 }
 

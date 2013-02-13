@@ -11,7 +11,7 @@ import org.junit.Test;
 import com.mcentric.JMSConsumer;
 import com.mcentric.JMSProducer;
 import com.mcentric.activemq.ActiveMQConsumer;
-import com.mcentric.apollo.ApolloStompProducer;
+import com.mcentric.activemq.ActiveMQProducer;
 import com.rabbitmq.client.QueueingConsumer.Delivery;
 
 @PerfTest(invocations=10000,threads=4)
@@ -28,7 +28,7 @@ public class TestActiveMQSpeed {
 	@BeforeClass
 	public static void setUp() throws Exception {
 		consumer = new ActiveMQConsumer();
-		producer = new ApolloStompProducer();
+		producer = new ActiveMQProducer();
 	}
 
 	@Test

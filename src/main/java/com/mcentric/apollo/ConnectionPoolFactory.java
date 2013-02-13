@@ -15,7 +15,9 @@ public class ConnectionPoolFactory  extends BasePoolableObjectFactory<Connection
 
 	@Override
 	public Connection makeObject() throws Exception {
-		return factory.createConnection();
+		Connection con = factory.createConnection();
+		con.start();
+		return con;
 	}
 	
 	@Override

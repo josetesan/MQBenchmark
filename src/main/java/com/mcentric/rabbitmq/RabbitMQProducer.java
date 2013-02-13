@@ -36,6 +36,10 @@ public class RabbitMQProducer implements Serializable,JMSProducer {
 		connectionPool.returnObject(conn);
 	}
 	
+	@Override
+	public void stop() throws Exception {
+		connectionPool.close();
+	}
 	
 	
 	private ConnectionFactory createFactory() {

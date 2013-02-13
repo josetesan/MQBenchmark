@@ -3,6 +3,7 @@ package com.mcentric.test;
 
 import org.databene.contiperf.PerfTest;
 import org.databene.contiperf.junit.ContiPerfRule;
+import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Rule;
@@ -44,7 +45,11 @@ public class TestRabbitSpeed {
 
 	
 	
-	
+	@AfterClass
+	public static void tearDown() throws Exception {
+		consumer.stop();
+		producer.stop();
+	}
 
 	
 }

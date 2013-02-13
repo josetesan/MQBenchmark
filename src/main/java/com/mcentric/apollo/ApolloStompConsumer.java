@@ -49,16 +49,19 @@ public class ApolloStompConsumer  implements Serializable , JMSConsumer {
 	@Override
 	public Object run() throws Exception {
 		Connection connection = connectionPool.borrowObject();
-		connection.start();
 		QueueSession session = (QueueSession)connection.createSession(false,Session.AUTO_ACKNOWLEDGE);
 		
 		inQueue = new StompJmsQueue("/queue/","test.queue");
 		MessageConsumer consumer = session.createConsumer(inQueue);
 		Message message = consumer.receive(1000);
-		connectionPool.returnObject(connection);
 		session.close();
 		consumer.close();
+		connectionPool.returnObject(connection);
 		return message;
 	}
 
+	@Override
+	public void stop() throws Exception {
+		connectionPool.close();
+	}
 }

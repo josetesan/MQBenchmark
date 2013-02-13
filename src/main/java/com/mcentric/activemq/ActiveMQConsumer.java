@@ -48,7 +48,6 @@ public class ActiveMQConsumer  implements Serializable, JMSConsumer  {
 	@Override
 	public Object run() throws Exception {
 		Connection connection = connectionPool.borrowObject();
-		connection.start();
 		QueueSession session = (QueueSession)connection.createSession(false,Session.AUTO_ACKNOWLEDGE);
 		MessageConsumer consumer = session.createConsumer(inQueue);
 		Message message = consumer.receive(1000);
@@ -58,4 +57,8 @@ public class ActiveMQConsumer  implements Serializable, JMSConsumer  {
 		return message;
 	}
 
+	@Override
+	public void stop() throws Exception {
+		connectionPool.close();
+	}
 }
