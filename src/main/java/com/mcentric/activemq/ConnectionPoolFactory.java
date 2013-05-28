@@ -18,7 +18,6 @@ public class ConnectionPoolFactory  extends BasePoolableObjectFactory<Connection
 		Connection con = factory.createConnection();
 		con.start();
 		return con;
-		
 	}
 	
 	@Override

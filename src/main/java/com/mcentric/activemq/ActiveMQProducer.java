@@ -36,7 +36,7 @@ public class ActiveMQProducer  implements Serializable , JMSProducer {
 
 	public ActiveMQProducer() {
 		 try {
-			 ConnectionFactory connectionFactory = new ActiveMQConnectionFactory("nio://192.168.101.32:61000");
+			 ConnectionFactory connectionFactory = new ActiveMQConnectionFactory("nio://192.168.101.40:61000");
 		     outQueue = new ActiveMQQueue("test.queue");    
 			 connectionPool = new StackObjectPool<Connection>(new ConnectionPoolFactory(connectionFactory));
 	        } catch (Exception e) {
@@ -54,18 +54,17 @@ public class ActiveMQProducer  implements Serializable , JMSProducer {
      * Finally, close connection.
      */
 	@Override
-	public void run() { 
+	public void run() throws Exception {
+		Connection connection = null;
 		try {
-			
-			Connection connection = connectionPool.borrowObject();
+			connection = connectionPool.borrowObject();
 			QueueSession session = (QueueSession)connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
 			MessageProducer producer = session.createProducer(outQueue);
 			TextMessage message = session.createTextMessage("Hello World");
 			producer.send(message);
+		} finally {
 			connectionPool.returnObject(connection);
-		} catch (Exception e ) {
-			  throw new RuntimeException(e);
-		} 
+		}
 	}
 
 	

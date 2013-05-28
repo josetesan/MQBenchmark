@@ -26,14 +26,18 @@ public class RabbitMQProducer implements Serializable,JMSProducer {
 	
 	@Override
 	public void run() throws Exception {
-		Connection conn = connectionPool.borrowObject();
-		Channel channel = conn.createChannel();
-		String exchangeName = "myExchange";
-		String routingKey = "testRoute";
-		byte[] messageBodyBytes = "Hello, world!".getBytes();
-		channel.basicPublish(exchangeName, routingKey, MessageProperties.PERSISTENT_TEXT_PLAIN, messageBodyBytes);
-		channel.close();
-		connectionPool.returnObject(conn);
+		Connection conn = null;
+		try {
+			conn = connectionPool.borrowObject();
+			Channel channel = conn.createChannel();
+			String exchangeName = "myExchange";
+			String routingKey = "testRoute";
+			byte[] messageBodyBytes = "Hello, world!".getBytes();
+			channel.basicPublish(exchangeName, routingKey, MessageProperties.PERSISTENT_TEXT_PLAIN, messageBodyBytes);
+			channel.close();
+		} finally {
+			connectionPool.returnObject(conn);
+		}
 	}
 	
 	@Override

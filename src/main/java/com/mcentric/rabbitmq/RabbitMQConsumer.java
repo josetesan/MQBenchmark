@@ -33,29 +33,31 @@ public class RabbitMQConsumer implements Serializable, JMSConsumer {
 	 */
 	@Override
 	public Object run() throws Exception {
-		
+		Connection conn = null;
 		Delivery delivery = null;
-		
-		Connection conn = connectionPool.borrowObject();
-		Channel channel = conn.createChannel();
-		String exchangeName = "myExchange";
-		String queueName = "myQueue";
-		String routingKey = "testRoute";
-		boolean durable = true;
-		channel.exchangeDeclare(exchangeName, "direct", durable);
-		channel.queueDeclare(queueName, durable, false, false, null);
-		channel.queueBind(queueName, exchangeName, routingKey);
-		boolean noAck = false;
-		QueueingConsumer consumer = new QueueingConsumer(channel);
-		channel.basicConsume(queueName, noAck, consumer);
 		try {
-			delivery = consumer.nextDelivery();
-		} catch (InterruptedException ie) {
+			conn = connectionPool.borrowObject();
+			Channel channel = conn.createChannel();
+			String exchangeName = "myExchange";
+			String queueName = "myQueue";
+			String routingKey = "testRoute";
+			boolean durable = true;
+			channel.exchangeDeclare(exchangeName, "direct", durable);
+			channel.queueDeclare(queueName, durable, false, false, null);
+			channel.queueBind(queueName, exchangeName, routingKey);
+			boolean noAck = false;
+			QueueingConsumer consumer = new QueueingConsumer(channel);
+			channel.basicConsume(queueName, noAck, consumer);
+			try {
+				delivery = consumer.nextDelivery();
+			} catch (InterruptedException ie) {
+			}
+			//System.out.println("Message received" + new String(delivery.getBody()));
+			channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
+			channel.close();
+		} finally {
+			connectionPool.returnObject(conn);	
 		}
-		//System.out.println("Message received" + new String(delivery.getBody()));
-		channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
-		channel.close();
-		connectionPool.returnObject(conn);
 		return delivery;
 	}
 	

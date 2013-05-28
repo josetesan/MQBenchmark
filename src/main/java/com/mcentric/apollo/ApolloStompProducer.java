@@ -27,7 +27,7 @@ import com.mcentric.JMSProducer;
  */
 public class ApolloStompProducer  implements Serializable , JMSProducer {
 
-	private static final String URI = "tcp://localhost:61613";
+	private static final String URI = "tcp://192.168.101.32:61000";
 	/**
 	 * 
 	 */
@@ -55,20 +55,20 @@ public class ApolloStompProducer  implements Serializable , JMSProducer {
      * Finally, close connection.
      */
 	@Override
-	public void run() { 
+	public void run() throws Exception { 
+		Connection connection = null;
 		try {
-			
-			Connection connection = connectionPool.borrowObject();
+			connection = connectionPool.borrowObject();
 			QueueSession session = (QueueSession)connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
 			outQueue = 	new StompJmsQueue("/queue/","test.queue");
 			MessageProducer producer = session.createProducer(outQueue);
 			producer.setDeliveryMode(DeliveryMode.PERSISTENT);
 			TextMessage message = session.createTextMessage("Hello World");
 			producer.send(message);
+		} finally {
 			connectionPool.returnObject(connection);
-		} catch (Exception e ) {
-			  throw new RuntimeException(e);
-		} 
+		}
+
 	}
 
 	
