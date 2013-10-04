@@ -14,7 +14,7 @@ group = 'com.mcentric.mqbench'
 
 
 dependencies {
-   compile 'com.rabbitmq:amqp-client:3.1.0'
+   compile 'com.rabbitmq:amqp-client:3.1.4'
    compile 'org.apache.activemq:activemq-client:5.8.0'
    compile 'org.apache.activemq:apollo-cli:1.6'
    compile 'org.fusesource.stompjms:stompjms-client:1.16'

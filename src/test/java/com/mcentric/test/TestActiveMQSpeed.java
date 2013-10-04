@@ -14,37 +14,37 @@ import com.mcentric.activemq.ActiveMQConsumer;
 import com.mcentric.activemq.ActiveMQProducer;
 import com.rabbitmq.client.QueueingConsumer.Delivery;
 
-@PerfTest(invocations=10000,threads=4)
+@PerfTest(duration=30000,threads=16)
 public class TestActiveMQSpeed {
-	
-	@Rule
-	public ContiPerfRule i = new ContiPerfRule();
-	
-	
-	private static JMSConsumer consumer;
-	private static JMSProducer producer;
-	private static Delivery delivery = null;
+    
+    @Rule
+    public ContiPerfRule i = new ContiPerfRule();
+    
+    
+    private static JMSConsumer consumer;
+    private static JMSProducer producer;
+    private static Delivery delivery = null;
 
-	@BeforeClass
-	public static void setUp() throws Exception {
-		consumer = new ActiveMQConsumer();
-		producer = new ActiveMQProducer();
-	}
+    @BeforeClass
+    public static void setUp() throws Exception {
+        consumer = new ActiveMQConsumer();
+        producer = new ActiveMQProducer();
+    }
 
-	@Test
-	public void test() {
-		try {
-			producer.run();
-			delivery = (Delivery)consumer.run();
-			Assert.assertNotNull(delivery);
-		} catch (Exception e) {
-			
-		}
-	}
+    @Test
+    public void test() {
+        try {
+            producer.run();
+            delivery = (Delivery)consumer.run();
+            Assert.assertNotNull(delivery);
+        } catch (Exception e) {
+            
+        }
+    }
 
-	
-	
-	
+    
+    
+    
 
-	
+    
 }

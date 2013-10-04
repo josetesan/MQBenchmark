@@ -32,12 +32,12 @@ public class ActiveMQProducer  implements Serializable , JMSProducer {
 	 */
 	private static final long serialVersionUID = 4405239442926758477L;
 	private ObjectPool <Connection> connectionPool;
-    private Destination outQueue = null;
+	private Destination outQueue = null;
 
 	public ActiveMQProducer() {
 		 try {
 			 ConnectionFactory connectionFactory = new ActiveMQConnectionFactory("nio://192.168.101.40:61000");
-		     outQueue = new ActiveMQQueue("test.queue");    
+		         outQueue = new ActiveMQQueue("test.queue");    
 			 connectionPool = new StackObjectPool<Connection>(new ConnectionPoolFactory(connectionFactory));
 	        } catch (Exception e) {
 	            System.exit(-2);

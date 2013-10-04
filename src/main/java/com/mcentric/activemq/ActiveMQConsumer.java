@@ -38,8 +38,8 @@ public class ActiveMQConsumer  implements Serializable, JMSConsumer  {
 	public ActiveMQConsumer() {
 		try {
 			ConnectionFactory connectionFactory = new ActiveMQConnectionFactory("nio://192.168.101.32:61000");
-		    inQueue = new ActiveMQQueue("test.queue");    
-		    this.connectionPool = new StackObjectPool<Connection>(new ConnectionPoolFactory(connectionFactory));
+		        inQueue = new ActiveMQQueue("test.queue");    
+			this.connectionPool = new StackObjectPool<Connection>(new ConnectionPoolFactory(connectionFactory));
 		} catch (Exception e) {
 			 System.exit(-1);
 		}

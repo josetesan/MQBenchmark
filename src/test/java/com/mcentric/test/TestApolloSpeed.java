@@ -14,37 +14,37 @@ import com.mcentric.apollo.ApolloStompConsumer;
 import com.mcentric.apollo.ApolloStompProducer;
 import com.rabbitmq.client.QueueingConsumer.Delivery;
 
-@PerfTest(invocations=10000,threads=4)
+@PerfTest(duration=30000,threads=16)
 public class TestApolloSpeed {
-	
-	@Rule
-	public ContiPerfRule i = new ContiPerfRule();
-	
-	
-	private static JMSConsumer consumer;
-	private static JMSProducer producer;
-	private static Delivery delivery = null;
+    
+    @Rule
+    public ContiPerfRule i = new ContiPerfRule();
+    
+    
+    private static JMSConsumer consumer;
+    private static JMSProducer producer;
+    private static Delivery delivery = null;
 
-	@BeforeClass
-	public static void setUp() throws Exception {
-		consumer = new ApolloStompConsumer();
-		producer = new ApolloStompProducer();
-	}
+    @BeforeClass
+    public static void setUp() throws Exception {
+        consumer = new ApolloStompConsumer();
+        producer = new ApolloStompProducer();
+    }
 
-	@Test
-	public void test() {
-		try {
-			producer.run();
-			delivery = (Delivery)consumer.run();
-			Assert.assertNotNull(delivery);
-		} catch (Exception e) {
-			
-		}
-	}
+    @Test
+    public void test() {
+        try {
+            producer.run();
+            delivery = (Delivery)consumer.run();
+            Assert.assertNotNull(delivery);
+        } catch (Exception e) {
+            
+        }
+    }
 
-	
-	
-	
+    
+    
+    
 
-	
+    
 }
