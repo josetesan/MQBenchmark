@@ -14,10 +14,10 @@ group = 'com.mcentric.mqbench'
 
 
 dependencies {
-   compile 'com.rabbitmq:amqp-client:3.1.4'
-   compile 'org.apache.activemq:activemq-client:5.8.0'
+   compile 'com.rabbitmq:amqp-client:3.2.1'
+   compile 'org.apache.activemq:activemq-client:5.9.0'
    compile 'org.apache.activemq:apollo-cli:1.6'
-   compile 'org.fusesource.stompjms:stompjms-client:1.16'
+   compile 'org.fusesource.stompjms:stompjms-client:1.18'
 
    compile 'commons-pool:commons-pool:1.6'
    testCompile 'junit:junit:4.11'
@@ -29,11 +29,11 @@ dependencies {
 
 jar {
     manifest {
-        attributes  'Implementation-Title': 'MQ Benchmark Test', 
-	            'Implementation-Version': version,
-	            'Built-Date': new Date(),
-	            'Built-JDK': System.getProperty('java.version'),
-    		    'Class-Path' : configurations.runtime.files.join(" ")
+        attributes  'Implementation-Title': 'MQ Benchmark Test',
+              'Implementation-Version': version,
+              'Built-Date': new Date(),
+              'Built-JDK': System.getProperty('java.version'),
+            'Class-Path' : configurations.runtime.files.join(" ")
         
     }
 }
