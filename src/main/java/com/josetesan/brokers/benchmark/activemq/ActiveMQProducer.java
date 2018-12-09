@@ -38,7 +38,7 @@ public class ActiveMQProducer  implements Serializable , JMSProducer {
 	public ActiveMQProducer() {
 		 try {
 			 ConnectionFactory connectionFactory = new ActiveMQConnectionFactory("nio://"+SERVER_IP+":61000");
-		         outQueue = new ActiveMQQueue("test.queue");    
+			 outQueue = new ActiveMQQueue("test.queue");
 			 connectionPool = new GenericObjectPool<>(new ConnectionPoolFactory(connectionFactory));
 	        } catch (Exception e) {
 	            System.exit(-2);

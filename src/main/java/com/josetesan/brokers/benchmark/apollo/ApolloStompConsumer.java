@@ -31,8 +31,6 @@ public class ApolloStompConsumer  implements Serializable , JMSConsumer {
 	
 	private static final long serialVersionUID = 8418778306727988075L;
 	
-    protected String queueName = null; 
-    private Destination inQueue = null;
     private ObjectPool <Connection> connectionPool;
 	
 
@@ -52,7 +50,7 @@ public class ApolloStompConsumer  implements Serializable , JMSConsumer {
 		try {
 			connection = connectionPool.borrowObject();
 			QueueSession session = (QueueSession)connection.createSession(false,Session.AUTO_ACKNOWLEDGE);
-			inQueue = new StompJmsQueue("/queue/","test.queue");
+			Destination inQueue = new StompJmsQueue("/queue/","test.queue");
 			MessageConsumer consumer = session.createConsumer(inQueue);
 			Message message = consumer.receive(1000);
 			session.close();
@@ -64,7 +62,7 @@ public class ApolloStompConsumer  implements Serializable , JMSConsumer {
 	}
 
 	@Override
-	public void stop() throws Exception {
+	public void stop()  {
 		connectionPool.close();
 	}
 }

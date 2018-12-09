@@ -74,7 +74,7 @@ public class ApolloStompProducer  implements Serializable , JMSProducer {
 
 	
 	@Override
-	public void stop() throws Exception {
+	public void stop()  {
 		connectionPool.close();
 	}
 }

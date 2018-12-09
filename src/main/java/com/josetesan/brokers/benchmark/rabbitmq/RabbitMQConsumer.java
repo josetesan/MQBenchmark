@@ -3,29 +3,33 @@ package com.josetesan.brokers.benchmark.rabbitmq;
 import java.io.Serializable;
 
 import com.josetesan.brokers.benchmark.JMSConsumer;
-import com.rabbitmq.client.DefaultConsumer;
+import com.rabbitmq.client.DeliverCallback;
+import com.rabbitmq.client.Delivery;
 import org.apache.commons.pool2.ObjectPool;
 import org.apache.commons.pool2.impl.GenericObjectPool;
 
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static com.josetesan.brokers.benchmark.ServerConstants.SERVER_IP;
 
 public class RabbitMQConsumer implements Serializable, JMSConsumer {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(RabbitMQConsumer.class);
 	
 	/**
 	 * 
 	 */
 	private static final long	serialVersionUID	= 1L;
 	
-	private ConnectionFactory factory ;
 	private ObjectPool <Connection> connectionPool;
 	
 	
 	public RabbitMQConsumer() {
-		this.factory = createFactory();
+		ConnectionFactory factory = createFactory();
 		this.connectionPool = new GenericObjectPool<>(new ConnectionPoolFactory(factory));
 	}
 	
@@ -34,22 +38,15 @@ public class RabbitMQConsumer implements Serializable, JMSConsumer {
 	 */
 	@Override
 	public Object run() throws Exception {
-		Connection conn = null;
 		String tag = null;
-		try {
-			conn = connectionPool.borrowObject();
-			try (Channel channel = conn.createChannel()) {
-				String exchangeName = "myExchange";
-				String queueName = "myQueue";
-				String routingKey = "testRoute";
-				boolean durable = true;
-				channel.exchangeDeclare(exchangeName, "direct", durable);
-				channel.queueDeclare(queueName, durable, false, false, null);
-				channel.queueBind(queueName, exchangeName, routingKey);
-				boolean noAck = false;
-				DefaultConsumer consumer = new DefaultConsumer(channel);
-				tag = channel.basicConsume(queueName, noAck, consumer);
-			}
+
+		Connection conn = connectionPool.borrowObject();
+		try (Channel channel = conn.createChannel()) {
+			String queueName = "myQueue";
+			channel.basicConsume(queueName, false, ((consumerTag, delivery) -> {
+				LOGGER.info("Received message {}",new String(delivery.getBody(),"UTF-8"));
+				channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
+			}), consumerTag -> { });
 		} finally {
 			connectionPool.returnObject(conn);	
 		}

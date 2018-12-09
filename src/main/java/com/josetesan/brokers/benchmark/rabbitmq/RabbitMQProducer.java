@@ -18,11 +18,10 @@ public class RabbitMQProducer implements Serializable, JMSProducer {
 	 * 
 	 */
 	private static final long	serialVersionUID	= 1L;
-	private ConnectionFactory factory ;
 	private ObjectPool<Connection> connectionPool;
 	
 	public RabbitMQProducer() {
-		this.factory = createFactory();
+		ConnectionFactory factory = createFactory();
 		this.connectionPool = new GenericObjectPool<>(new ConnectionPoolFactory(factory));
 	}
 	
@@ -43,7 +42,7 @@ public class RabbitMQProducer implements Serializable, JMSProducer {
 	}
 	
 	@Override
-	public void stop() throws Exception {
+	public void stop()  {
 		connectionPool.close();
 	}
 	

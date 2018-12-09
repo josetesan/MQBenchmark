@@ -30,7 +30,6 @@ public class ActiveMQConsumer  implements Serializable, JMSConsumer {
 
 	private static final long serialVersionUID = 8418778306727988075L;
 	
-    protected String queueName = null; 
     private Destination inQueue = null;
     private ObjectPool <Connection> connectionPool;
 	
@@ -38,7 +37,7 @@ public class ActiveMQConsumer  implements Serializable, JMSConsumer {
 	public ActiveMQConsumer() {
 		try {
 			ConnectionFactory connectionFactory = new ActiveMQConnectionFactory("nio://"+SERVER_IP+":61000");
-		        inQueue = new ActiveMQQueue("test.queue");    
+			inQueue = new ActiveMQQueue("test.queue");
 			this.connectionPool = new GenericObjectPool<>(new ConnectionPoolFactory(connectionFactory));
 		} catch (Exception e) {
 			 System.exit(-1);
@@ -63,7 +62,7 @@ public class ActiveMQConsumer  implements Serializable, JMSConsumer {
 	}
 
 	@Override
-	public void stop() throws Exception {
+	public void stop()  {
 		connectionPool.close();
 	}
 }

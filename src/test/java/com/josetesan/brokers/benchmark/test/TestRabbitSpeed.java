@@ -14,6 +14,7 @@ import org.junit.Test;
 import com.josetesan.brokers.benchmark.rabbitmq.RabbitMQConsumer;
 import com.josetesan.brokers.benchmark.rabbitmq.RabbitMQProducer;
 
+
 import static org.junit.Assert.fail;
 
 @PerfTest(duration=30000,threads=16)
