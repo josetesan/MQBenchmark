@@ -1,6 +1,8 @@
-package com.mcentric.test;
+package com.josetesan.brokers.benchmark.test;
 
 
+import com.josetesan.brokers.benchmark.JMSConsumer;
+import com.josetesan.brokers.benchmark.JMSProducer;
 import org.databene.contiperf.PerfTest;
 import org.databene.contiperf.junit.ContiPerfRule;
 import org.junit.AfterClass;
@@ -9,11 +11,10 @@ import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 
-import com.mcentric.JMSConsumer;
-import com.mcentric.JMSProducer;
-import com.mcentric.rabbitmq.RabbitMQConsumer;
-import com.mcentric.rabbitmq.RabbitMQProducer;
-import com.rabbitmq.client.QueueingConsumer.Delivery;
+import com.josetesan.brokers.benchmark.rabbitmq.RabbitMQConsumer;
+import com.josetesan.brokers.benchmark.rabbitmq.RabbitMQProducer;
+
+import static org.junit.Assert.fail;
 
 @PerfTest(duration=30000,threads=16)
 public class TestRabbitSpeed {
@@ -24,10 +25,9 @@ public class TestRabbitSpeed {
     
     private static JMSConsumer consumer;
     private static JMSProducer producer;
-    private static Delivery delivery = null;
 
     @BeforeClass
-    public static void setUp() throws Exception {
+    public static void setUp()  {
         consumer = new RabbitMQConsumer();
         producer = new RabbitMQProducer();
     }
@@ -36,10 +36,10 @@ public class TestRabbitSpeed {
     public void test() {
         try {
             producer.run();
-            delivery = (Delivery)consumer.run();
-            Assert.assertNotNull(delivery);
+            String tag = (String)consumer.run();
+            Assert.assertNotNull(tag);
         } catch (Exception e) {
-            
+            fail("Nothing received "+e);
         }
     }
 

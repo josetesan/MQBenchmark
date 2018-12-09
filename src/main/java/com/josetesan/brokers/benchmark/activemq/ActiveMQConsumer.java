@@ -1,34 +1,33 @@
 /**
  * 
  */
-package com.mcentric.apollo;
+package com.josetesan.brokers.benchmark.activemq;
 
 import java.io.Serializable;
 
 import javax.jms.Connection;
+import javax.jms.ConnectionFactory;
 import javax.jms.Destination;
 import javax.jms.Message;
 import javax.jms.MessageConsumer;
 import javax.jms.QueueSession;
 import javax.jms.Session;
 
-import org.apache.commons.pool.ObjectPool;
-import org.apache.commons.pool.impl.StackObjectPool;
-import org.fusesource.stomp.jms.StompJmsConnectionFactory;
-import org.fusesource.stomp.jms.StompJmsQueue;
+import com.josetesan.brokers.benchmark.JMSConsumer;
+import org.apache.activemq.ActiveMQConnectionFactory;
+import org.apache.activemq.command.ActiveMQQueue;
+import org.apache.commons.pool2.ObjectPool;
+import org.apache.commons.pool2.impl.GenericObjectPool;
 
-import com.mcentric.JMSConsumer;
-
+import static com.josetesan.brokers.benchmark.ServerConstants.SERVER_IP;
 
 
 /**
  * @author joseluis.sanchez@m-centric.com
  * Created on 23/07/2009
  */
-public class ApolloStompConsumer  implements Serializable , JMSConsumer {
+public class ActiveMQConsumer  implements Serializable, JMSConsumer {
 
-	private static final String URI = "tcp://localhost:61613";
-	
 	private static final long serialVersionUID = 8418778306727988075L;
 	
     protected String queueName = null; 
@@ -36,11 +35,11 @@ public class ApolloStompConsumer  implements Serializable , JMSConsumer {
     private ObjectPool <Connection> connectionPool;
 	
 
-	public ApolloStompConsumer() {
+	public ActiveMQConsumer() {
 		try {
-			 StompJmsConnectionFactory factory = new StompJmsConnectionFactory();
-			 factory.setBrokerURI(URI);
-			 connectionPool = new StackObjectPool<Connection>(new ConnectionPoolFactory(factory));
+			ConnectionFactory connectionFactory = new ActiveMQConnectionFactory("nio://"+SERVER_IP+":61000");
+		        inQueue = new ActiveMQQueue("test.queue");    
+			this.connectionPool = new GenericObjectPool<>(new ConnectionPoolFactory(connectionFactory));
 		} catch (Exception e) {
 			 System.exit(-1);
 		}
@@ -52,7 +51,6 @@ public class ApolloStompConsumer  implements Serializable , JMSConsumer {
 		try {
 			connection = connectionPool.borrowObject();
 			QueueSession session = (QueueSession)connection.createSession(false,Session.AUTO_ACKNOWLEDGE);
-			inQueue = new StompJmsQueue("/queue/","test.queue");
 			MessageConsumer consumer = session.createConsumer(inQueue);
 			Message message = consumer.receive(1000);
 			session.close();
@@ -61,6 +59,7 @@ public class ApolloStompConsumer  implements Serializable , JMSConsumer {
 		} finally {
 			connectionPool.returnObject(connection);	
 		}
+		
 	}
 
 	@Override

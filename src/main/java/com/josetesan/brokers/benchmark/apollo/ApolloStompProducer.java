@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.mcentric.apollo;
+package com.josetesan.brokers.benchmark.apollo;
 
 import java.io.Serializable;
 
@@ -13,12 +13,13 @@ import javax.jms.QueueSession;
 import javax.jms.Session;
 import javax.jms.TextMessage;
 
-import org.apache.commons.pool.ObjectPool;
-import org.apache.commons.pool.impl.StackObjectPool;
+import com.josetesan.brokers.benchmark.JMSProducer;
+import org.apache.commons.pool2.ObjectPool;
+import org.apache.commons.pool2.impl.GenericObjectPool;
 import org.fusesource.stomp.jms.StompJmsConnectionFactory;
 import org.fusesource.stomp.jms.StompJmsQueue;
 
-import com.mcentric.JMSProducer;
+import static com.josetesan.brokers.benchmark.ServerConstants.SERVER_IP;
 
 
 /**
@@ -27,7 +28,7 @@ import com.mcentric.JMSProducer;
  */
 public class ApolloStompProducer  implements Serializable , JMSProducer {
 
-	private static final String URI = "tcp://192.168.101.32:61000";
+	private static final String URI = "tcp://"+SERVER_IP+":61000";
 	/**
 	 * 
 	 */
@@ -39,7 +40,7 @@ public class ApolloStompProducer  implements Serializable , JMSProducer {
 		 try {
 			 StompJmsConnectionFactory factory = new StompJmsConnectionFactory();
 			 factory.setBrokerURI(URI);
-			 connectionPool = new StackObjectPool<Connection>(new ConnectionPoolFactory(factory));
+			 connectionPool = new GenericObjectPool<>(new ConnectionPoolFactory(factory));
 	        } catch (Exception e) {
 	            System.exit(-2);
 	        }

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.mcentric.activemq;
+package com.josetesan.brokers.benchmark.activemq;
 
 import java.io.Serializable;
 
@@ -13,12 +13,13 @@ import javax.jms.QueueSession;
 import javax.jms.Session;
 import javax.jms.TextMessage;
 
+import com.josetesan.brokers.benchmark.JMSProducer;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.activemq.command.ActiveMQQueue;
-import org.apache.commons.pool.ObjectPool;
-import org.apache.commons.pool.impl.StackObjectPool;
 
-import com.mcentric.JMSProducer;
+import org.apache.commons.pool2.impl.GenericObjectPool;
+
+import static com.josetesan.brokers.benchmark.ServerConstants.SERVER_IP;
 
 
 /**
@@ -31,14 +32,14 @@ public class ActiveMQProducer  implements Serializable , JMSProducer {
 	 * 
 	 */
 	private static final long serialVersionUID = 4405239442926758477L;
-	private ObjectPool <Connection> connectionPool;
+	private GenericObjectPool <Connection> connectionPool;
 	private Destination outQueue = null;
 
 	public ActiveMQProducer() {
 		 try {
-			 ConnectionFactory connectionFactory = new ActiveMQConnectionFactory("nio://192.168.101.40:61000");
+			 ConnectionFactory connectionFactory = new ActiveMQConnectionFactory("nio://"+SERVER_IP+":61000");
 		         outQueue = new ActiveMQQueue("test.queue");    
-			 connectionPool = new StackObjectPool<Connection>(new ConnectionPoolFactory(connectionFactory));
+			 connectionPool = new GenericObjectPool<>(new ConnectionPoolFactory(connectionFactory));
 	        } catch (Exception e) {
 	            System.exit(-2);
 	        }
@@ -69,7 +70,7 @@ public class ActiveMQProducer  implements Serializable , JMSProducer {
 
 	
 	@Override
-	public void stop() throws Exception {
+	public void stop() {
 		connectionPool.close();
 	}
 }

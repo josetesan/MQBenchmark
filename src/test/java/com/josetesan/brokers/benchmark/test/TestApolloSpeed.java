@@ -1,6 +1,9 @@
-package com.mcentric.test;
+package com.josetesan.brokers.benchmark.test;
 
 
+import com.josetesan.brokers.benchmark.JMSConsumer;
+import com.josetesan.brokers.benchmark.JMSProducer;
+import com.josetesan.brokers.benchmark.apollo.ApolloStompConsumer;
 import org.databene.contiperf.PerfTest;
 import org.databene.contiperf.junit.ContiPerfRule;
 import org.junit.Assert;
@@ -8,14 +11,11 @@ import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 
-import com.mcentric.JMSConsumer;
-import com.mcentric.JMSProducer;
-import com.mcentric.activemq.ActiveMQConsumer;
-import com.mcentric.activemq.ActiveMQProducer;
-import com.rabbitmq.client.QueueingConsumer.Delivery;
+import com.josetesan.brokers.benchmark.apollo.ApolloStompProducer;
+import com.rabbitmq.client.Delivery;
 
 @PerfTest(duration=30000,threads=16)
-public class TestActiveMQSpeed {
+public class TestApolloSpeed {
     
     @Rule
     public ContiPerfRule i = new ContiPerfRule();
@@ -26,9 +26,9 @@ public class TestActiveMQSpeed {
     private static Delivery delivery = null;
 
     @BeforeClass
-    public static void setUp() throws Exception {
-        consumer = new ActiveMQConsumer();
-        producer = new ActiveMQProducer();
+    public static void setUp()  {
+        consumer = new ApolloStompConsumer();
+        producer = new ApolloStompProducer();
     }
 
     @Test

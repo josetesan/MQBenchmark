@@ -1,28 +1,26 @@
 apply plugin: 'java'
 
 repositories {
- //   mavenCentral()
-    maven {        url "http://192.168.101.40:8081/nexus/content/groups/public"    }
-    mavenLocal()
+   mavenCentral()
 
 }
 
-sourceCompatibility = 1.7
+sourceCompatibility = 1.8
 version = '1.0-SNAPSHOT'
 group = 'com.mcentric.mqbench'
 [compileJava, compileTestJava]*.options*.compilerArgs = ["-Xlint:all"]
 
 
 dependencies {
-   compile 'com.rabbitmq:amqp-client:3.2.1'
-   compile 'org.apache.activemq:activemq-client:5.9.0'
-   compile 'org.apache.activemq:apollo-cli:1.6'
-   compile 'org.fusesource.stompjms:stompjms-client:1.18'
+   compile 'com.rabbitmq:amqp-client:5.5.1'
+   compile 'org.apache.activemq:activemq-client:5.15.8'
+   compile 'org.apache.activemq:apollo-cli:1.7.1'
+   compile 'org.fusesource.stompjms:stompjms-client:1.19'
 
-   compile 'commons-pool:commons-pool:1.6'
-   testCompile 'junit:junit:4.11'
-   testCompile 'org.databene:contiperf:2.2.0'
-   testRuntime 'org.slf4j:slf4j-simple:1.7.5'
+   compile 'org.apache.commons:commons-pool2:2.6.0'
+   testCompile 'junit:junit:4.12'
+   testCompile 'org.databene:contiperf:2.3.4'
+   testRuntime 'org.slf4j:slf4j-simple:1.7.25'
    
 }
 

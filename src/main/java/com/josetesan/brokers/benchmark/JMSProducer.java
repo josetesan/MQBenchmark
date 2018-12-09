@@ -1,4 +1,4 @@
-package com.mcentric;
+package com.josetesan.brokers.benchmark;
 
 public interface JMSProducer {
 
